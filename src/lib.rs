@@ -1,3 +1,4 @@
+#![no_std]
 //! This eax implementation uses a block cipher in counter mode for encryption
 //! and the block cipher in CBC mode to generate the OMAC/CMAC/CBCMAC.
 //!
@@ -16,7 +17,7 @@ use subtle::ConstantTimeEq;
 pub struct Eax<C: BlockCipher<BlockSize = U16> + Clone>
 where C::ParBlocks: ArrayLength<GenericArray<u8, U16>>
 {
-	phantom: std::marker::PhantomData<C>,
+	phantom: core::marker::PhantomData<C>,
 }
 
 impl<C: BlockCipher<BlockSize = U16> + Clone> Eax<C>
