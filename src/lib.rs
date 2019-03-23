@@ -1,9 +1,14 @@
 #![no_std]
+
 //! This eax implementation uses a block cipher in counter mode for encryption
 //! and the block cipher in CBC mode to generate the OMAC/CMAC/CBCMAC.
 //!
 //! EAX is an AEAD (Authenticated Encryption with Associated Data) encryption
 //! scheme.
+
+#[cfg(test)]
+#[macro_use]
+extern crate std;
 
 use block_cipher_trait::generic_array::functional::FunctionalSequence;
 use block_cipher_trait::generic_array::typenum::U16;
@@ -113,5 +118,30 @@ where C::ParBlocks: ArrayLength<GenericArray<u8, U16>>
 		mac.input(data);
 
 		mac.result()
+	}
+}
+
+#[cfg(test)]
+mod test {
+	use super::*;
+
+	use std::prelude::v1::*;
+	use quickcheck::quickcheck;
+
+	#[test]
+	fn known_data() {
+		let mut data = [1, 2, 3, 4, 5];
+		let mac = Eax::<aes::Aes128>::encrypt(&[0; 16].into(), &[0; 16].into(), &[1, 2, 3, 4], &mut data);
+		assert_eq!(mac.as_slice(), &[232, 88, 147, 206, 130, 126, 14, 121, 62, 127, 33, 233, 239, 81, 51, 177]);
+		assert_eq!(&data, &[182, 81, 68, 170, 62]);
+	}
+
+	quickcheck! {
+		fn roundtrip(data: Vec<u8>) -> bool {
+			let mut enc = data.clone();
+			let mac = Eax::<aes::Aes128>::encrypt(&[0; 16].into(), &[0; 16].into(), &[1, 2, 3, 4], &mut enc);
+			Eax::<aes::Aes128>::decrypt(&[0; 16].into(), &[0; 16].into(), &[1, 2, 3, 4], &mut enc, &mac).unwrap();
+			data == enc
+		}
 	}
 }
