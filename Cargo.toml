@@ -1,0 +1,21 @@
+[package]
+name = "eax"
+version = "0.1.0"
+authors = ["Flakebi <flakebi@t-online.de>"]
+description = """
+An implementation of the authenticated encryption with associated data scheme (AEAD) EAX.
+
+This scheme is only based on a block cipher. It uses counter mode (CTR) for
+encryption and CBC mode for generating a OMAC/CMAC/CBCMAC (all names for the same thing).
+"""
+license = "MIT/Apache-2.0"
+keywords = ["crypto", "aead"]
+categories = ["cryptography"]
+repository = "https://github.com/Flakebi/eax-rs"
+edition = "2018"
+
+[dependencies]
+block-cipher-trait = "0.6"
+cmac = "0.2"
+ctr = "0.3"
+subtle = "2"
