@@ -9,8 +9,8 @@ This scheme is only based on a block cipher. It uses counter mode (CTR) for
 encryption and CBC mode for generating a OMAC/CMAC/CBCMAC (all names for the same thing).
 """
 license = "MIT/Apache-2.0"
-keywords = ["crypto", "aead", "nostd"]
-categories = ["cryptography"]
+keywords = ["crypto", "cryptography", "aead"]
+categories = ["cryptography", "no-std"]
 repository = "https://github.com/Flakebi/eax-rs"
 edition = "2018"
 
